@@ -16,4 +16,4 @@ This repository will contain every piece of material about the subject. It will 
 ## Team
 
 - Trainer: Ivo Kostovski ivo.kostovski@gmail.com GH: ivo.kostovski@gmail.com
-- Assistant: Iva Cvetkovska ivacvetkovska.sedc@gmail.com GH: Iva-Cvetkovska
+- Assistant: Ivan Apostolovski ivan.apostolovski@gmail.com GH IvanXh0
