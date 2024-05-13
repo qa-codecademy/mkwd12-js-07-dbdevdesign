@@ -30,7 +30,7 @@ CREATE TABLE song (
 	id SERIAL PRIMARY KEY,
 	name VARCHAR(100) NOT NULL,
 	duration INTERVAL NOT NULL,
-	explict BOOLEAN DEFAULT false NOT NULL,
+	explicit BOOLEAN DEFAULT false NOT NULL,
 	artist_id INT REFERENCES artist(id)
 );
 
@@ -56,7 +56,7 @@ CREATE TABLE playlist (
 -- Query playlist table to check if it has been created properly
 SELECT * FROM playlist;
 
--- Create palylist_songs table (Many-to-Many reltionship betwee playlist and song)
+-- Create palylists_songs table (Many-to-Many reltionship betwee playlist and song)
 CREATE TABLE playlists_songs (
 	playlist_id INT REFERENCES playlist(id),
 	song_id INT REFERENCES song(id),
