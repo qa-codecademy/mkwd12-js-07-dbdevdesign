@@ -1,5 +1,4 @@
 -- Select everything and run the script
-
 DROP TABLE IF EXISTS artist_details, song_lyrics, playlists_songs, songs_genres, song, playlist, genre, artist, album;
 
 -- Artist table
@@ -36,13 +35,13 @@ CREATE TABLE song_lyrics (
     song_id INT UNIQUE REFERENCES song(id)
 );
 
--- playlist table
+-- Playlist table
 CREATE TABLE playlist (
     id SERIAL PRIMARY KEY,
     title VARCHAR(100)
 );
 
--- playlist_songs table (Many-to-Many relationship between playlists and songs)
+-- Playlist_Songs table (Many-to-Many relationship between playlists and songs)
 CREATE TABLE playlists_songs (
     playlist_id INT REFERENCES playlist(id),
     song_id INT REFERENCES song(id),
@@ -55,7 +54,7 @@ CREATE TABLE genre (
     name VARCHAR(100) UNIQUE NOT NULL
 );
 
--- songs_genres table (Many-to-Many relationship between songs and genres)
+-- Songs_Genres table (Many-to-Many relationship between songs and genres)
 CREATE TABLE songs_genres (
     song_id INT REFERENCES song(id),
     genre_id INT REFERENCES genre(id),
@@ -110,7 +109,12 @@ INSERT INTO artist (id, name) VALUES
 (37, 'Billie Eilish'),
 (38, 'Daft Punk'),
 (39, 'Lewis Capaldi'),
-(40, 'Post Malone');
+(40, 'Post Malone'),
+(41, 'Edyta Bartosiewicz'),
+(42, 'Mela Koteluk'),
+(43, 'Monika Brodka'),
+(44, 'Maria Peszek'),
+(45, 'Doda');
 
 INSERT INTO artist_details (id, date_of_birth, full_name, country, city, is_married, spouse_name, artist_id) VALUES 
 (1, '1972-10-17', 'Marshall Bruce Mathers III', 'USA', 'St Joseph', false, NULL, 1),
@@ -152,49 +156,56 @@ INSERT INTO artist_details (id, date_of_birth, full_name, country, city, is_marr
 (37, '2001-12-18', 'Billie Eilish Pirate Baird OConnell', 'USA', 'Los Angeles', false, NULL, 37),
 (38, '1974-01-03', 'Thomas Bangalter', 'France', 'Paris', true, 'Elodie Bouchez', 38),
 (39, '1996-10-07', 'Lewis Capaldi', 'Scotland', 'Bathgate', false, NULL, 39),
-(40, '1995-07-04', 'Austin Richard Post', 'USA', 'Syracuse', false, NULL, 40);
+(40, '1995-07-04', 'Austin Richard Post', 'USA', 'Syracuse', false, NULL, 40),
+(41, '1980-01-13', 'Artur Rojek', 'Poland', 'Warsaw', false, NULL, null),
+(42, '1990-02-01', 'Peter Fox', 'Germany', 'Berlin', false, NULL, null);
 
 INSERT INTO song (id, name, duration, explicit, artist_id) VALUES 
-(1, 'Lose Yourself', INTERVAL '5 minutes 26 seconds', true, 1),
-(2, 'New Rules', INTERVAL '3 minutes 31 seconds', false, 2),
-(3, 'Jedina', INTERVAL '4 minutes 4 seconds', false, 3),
-(4, 'Umbrella', INTERVAL '4 minutes 35 seconds', false, 4),
-(5, 'Love Story', INTERVAL '3 minutes 55 seconds', false, 5),
-(6, 'Titanium', INTERVAL '4 minutes 5 seconds', false, 6),
-(7, 'Hips Dont Lie', INTERVAL '3 minutes 38 seconds', false, 7),
-(8, 'Gods Plan', INTERVAL '3 minutes 19 seconds', true, 8),
-(9, 'Italiana', INTERVAL '4 minutes 13 seconds', false, 9),
-(10, 'Ti si mi u krvi', INTERVAL '5 minutes 46 seconds', false, 10),
-(11, 'Hello', INTERVAL '4 minutes 55 seconds', false, 11),
-(12, 'Blinding Lights', INTERVAL '3 minutes 22 seconds', false, 12),
-(13, 'Kalashnikov', INTERVAL '4 minutes 22 seconds', false, 13),
-(14, 'Trepni', INTERVAL '4 minutes 6 seconds', false, 14),
-(15, 'Insomnia', INTERVAL '4 minutes 28 seconds', true, 15),
-(16, 'Dva Galeba Bela', INTERVAL '4 minutes 15 seconds', false, 16),
-(17, 'Halo', INTERVAL '3 minutes 45 seconds', false, 17),
-(18, 'Paradise', INTERVAL '4 minutes 38 seconds', false, 18),
-(19, 'Shape of You', INTERVAL '3 minutes 54 seconds', false, 19),
-(20, 'Chandelier', INTERVAL '3 minutes 36 seconds', false, 20),
-(21, 'Born to Run', INTERVAL '4 minutes 31 seconds', false, 21),
-(22, '7 Rings', INTERVAL '2 minutes 58 seconds', true, 22),
-(23, 'So What', INTERVAL '9 minutes 22 seconds', false, 23),
-(24, 'Tukenecegiz', INTERVAL '5 minutes 2 seconds', false, 24),
-(25, 'Djelem Djelem', INTERVAL '3 minutes 45 seconds', false, 25),
-(26, 'Fear of the Dark', INTERVAL '7 minutes 18 seconds', false, 26),
-(27, 'Jugoslovenka', INTERVAL '4 minutes 47 seconds', false, 27),
-(28, 'Firestone', INTERVAL '4 minutes 33 seconds', false, 28),
-(29, 'Porcelain', INTERVAL '4 minutes 1 second', false, 29),
-(30, 'Do I Wanna Know', INTERVAL '4 minutes 32 seconds', false, 30),
-(31, 'Take Me to Church', INTERVAL '4 minutes 1 second', false, 31),
-(32, 'Feeling Good', INTERVAL '2 minutes 53 seconds', false, 32),
-(33, 'Miljacka', INTERVAL '3 minutes 50 seconds', false, 33),
-(34, 'Sve je laz', INTERVAL '4 minutes 11 seconds', false, 34),
-(35, 'Moj Dilbere', INTERVAL '3 minutes 15 seconds', false, 35),
-(36, 'HUMBLE.', INTERVAL '2 minutes 57 seconds', true, 36),
-(37, 'Bad Guy', INTERVAL '3 minutes 14 seconds', true, 37),
-(38, 'One More Time', INTERVAL '5 minutes 20 seconds', false, 38),
-(39, 'Someone You Loved', INTERVAL '3 minutes 2 seconds', false, 39),
-(40, 'Circles', INTERVAL '3 minutes 35 seconds', false, 40);
+(1, 'Lose Yourself', '5 minutes 26 seconds', true, 1),
+(2, 'New Rules', '3 minutes 31 seconds', false, 2),
+(3, 'Jedina', '4 minutes 4 seconds', false, 3),
+(4, 'Umbrella', '4 minutes 35 seconds', false, 4),
+(5, 'Love Story', '3 minutes 55 seconds', false, 5),
+(6, 'Titanium', '4 minutes 5 seconds', false, 6),
+(7, 'Hips Dont Lie', '3 minutes 38 seconds', false, 7),
+(8, 'Gods Plan', '3 minutes 19 seconds', true, 8),
+(9, 'Italiana', '4 minutes 13 seconds', false, 9),
+(10, 'Ti si mi u krvi', '5 minutes 46 seconds', false, 10),
+(11, 'Hello', '4 minutes 55 seconds', false, 11),
+(12, 'Blinding Lights', '3 minutes 22 seconds', false, 12),
+(13, 'Kalashnikov', '4 minutes 22 seconds', false, 13),
+(14, 'Trepni', '4 minutes 6 seconds', false, 14),
+(15, 'Insomnia', '4 minutes 28 seconds', true, 15),
+(16, 'Dva Galeba Bela', '4 minutes 15 seconds', false, 16),
+(17, 'Halo', '3 minutes 45 seconds', false, 17),
+(18, 'Paradise', '4 minutes 38 seconds', false, 18),
+(19, 'Shape of You', '3 minutes 54 seconds', false, 19),
+(20, 'Chandelier', '3 minutes 36 seconds', false, 20),
+(21, 'Born to Run', '4 minutes 31 seconds', false, 21),
+(22, '7 Rings', '2 minutes 58 seconds', true, 22),
+(23, 'So What', '9 minutes 22 seconds', false, 23),
+(24, 'Tukenecegiz', '5 minutes 2 seconds', false, 24),
+(25, 'Djelem Djelem', '3 minutes 45 seconds', false, 25),
+(26, 'Fear of the Dark', '7 minutes 18 seconds', false, 26),
+(27, 'Jugoslovenka', '4 minutes 47 seconds', false, 27),
+(28, 'Firestone', '4 minutes 33 seconds', false, 28),
+(29, 'Porcelain', '4 minutes 1 second', false, 29),
+(30, 'Do I Wanna Know', '4 minutes 32 seconds', false, 30),
+(31, 'Take Me to Church', '4 minutes 1 second', false, 31),
+(32, 'Feeling Good', '2 minutes 53 seconds', false, 32),
+(33, 'Miljacka', '3 minutes 50 seconds', false, 33),
+(34, 'Sve je laz', '4 minutes 11 seconds', false, 34),
+(35, 'Moj Dilbere', '3 minutes 15 seconds', false, 35),
+(36, 'HUMBLE.', '2 minutes 57 seconds', true, 36),
+(37, 'Bad Guy', '3 minutes 14 seconds', true, 37),
+(38, 'One More Time', '5 minutes 20 seconds', false, 38),
+(39, 'Someone You Loved', '3 minutes 2 seconds', false, 39),
+(40, 'Circles', '3 minutes 35 seconds', false, 40),
+(41, 'Vechernyaya Moskva', '4 minutes 12 seconds', false, null),
+(42, 'Katyusha', '3 minutes 5 seconds', false, null),
+(43, 'Podmoskovnye Vechera', '4 minutes 30 seconds', false, null),
+(44, 'Kalinka', '2 minutes 56 seconds', false, null),
+(45, 'Dorogoy Dlinnoyu', '4 minutes 21 seconds', false, null);
 
 INSERT INTO song_lyrics (id, lyrics, song_id) VALUES 
 (1, 'Look, if you had one shot, or one opportunity...', 1),
@@ -236,7 +247,17 @@ INSERT INTO song_lyrics (id, lyrics, song_id) VALUES
 (37, 'White shirt now red, my bloody nose...', 37),
 (38, 'One more time, were gonna celebrate...', 38),
 (39, 'Im going under, and this time I fear theres no one to save me...', 39),
-(40, 'Seasons change and our love went cold...', 40);
+(40, 'Seasons change and our love went cold...', 40),
+(48, 'Despacito, quiero respirar tu cuello despacito...', NULL),
+(49, 'Besame, besame mucho, como si fuera esta noche la ultima vez...', NULL),
+(50, 'La vida es un carnaval y las penas se van cantando...', NULL),
+(51, 'Eres tu, como una mañana de verano...', NULL),
+(52, 'Vivir mi vida, la la la la...', NULL),
+(53, 'La camisa negra, porque negra tengo el alma...', NULL),
+(54, 'Bailando, bailando, amigos adios, adios el silencio loco...', NULL),
+(55, 'La bamba, para bailar la bamba se necesita una poca de gracia...', NULL),
+(56, 'Volvere, volvere a tus brazos otra vez...', NULL),
+(57, 'Amor eterno e inolvidable...', NULL);
 
 INSERT INTO playlist (id, title) VALUES 
 (1, 'Workout Hits'),
@@ -248,7 +269,8 @@ INSERT INTO playlist (id, title) VALUES
 (7, 'Ultimate Pop Playlist'),
 (8, 'Jazz and Blues'),
 (9, 'Balkan Beats'),
-(10, 'Chill Vibes');
+(10, 'Chill Vibes'),
+(11, 'Listen on the road');
 
 INSERT INTO playlists_songs (playlist_id, song_id) VALUES 
 (1, 1),
@@ -301,7 +323,9 @@ INSERT INTO genre (id, name) VALUES
 (15, 'Electro Pop'),
 (16, 'Alternative Rock'),
 (17, 'Indie'),
-(18, 'Gospel');
+(18, 'Gospel'),
+(19, 'Black Metal'),
+(20, 'Polka');
 
 INSERT INTO songs_genres (song_id, genre_id) VALUES 
 (1, 1),
@@ -398,4 +422,14 @@ INSERT INTO album (id, name, rating, artist_id) VALUES
 (37, 'When We All Fall Asleep, Where Do We Go?', 4.8, 37),
 (38, 'Discovery', 4.7, 38),
 (39, 'Divinely Uninspired to a Hellish Extent', 4.3, 39),
-(40, 'Hollywoods Bleeding', 4.5, 40);
+(40, 'Hollywoods Bleeding', 4.5, 40),
+(43, 'Fados do Fado', 4.2, null),
+(44, 'O Melhor de Amalia Rodrigues', 4.7, null),
+(45, 'Fado em Mim', 4.5, null),
+(46, 'Desfado', 4.3, null),
+(47, 'Canta Fado', 4.0, null),
+(48, 'Senhora da Noite', 4.6, null),
+(49, 'Fado Tradicional', 4.4, null),
+(50, 'Pelo Dia Dentro', 4.1, null),
+(51, 'Rumo ao Sul', 4.3, null),
+(52, 'Mulher do Norte', 4.2, null);
