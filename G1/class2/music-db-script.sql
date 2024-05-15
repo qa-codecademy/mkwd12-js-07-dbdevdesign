@@ -52,7 +52,7 @@ CREATE TABLE playlists_songs (
 -- Genre table
 CREATE TABLE genre (
     id SERIAL PRIMARY KEY,
-    name VARCHAR(100) NOT NULL
+    name VARCHAR(100) UNIQUE NOT NULL
 );
 
 -- songs_genres table (Many-to-Many relationship between songs and genres)
@@ -66,7 +66,7 @@ CREATE TABLE songs_genres (
 CREATE TABLE album (
     id SERIAL PRIMARY KEY,
     name VARCHAR(100) NOT NULL,
-    rating DECIMAL,
+    rating DECIMAL CHECK(rating >= 0 AND rating <= 5),
     artist_id INT REFERENCES artist(id)
 );
 
