@@ -14,12 +14,19 @@ CREATE TABLE IF NOT EXISTS artist_details (
 	artist_id INT UNIQUE REFERENCES artist(id)
 );
 
+CREATE TABLE IF NOT EXISTS album (
+	id SERIAL PRIMARY KEY,
+	name VARCHAR(100) NOT NULL,
+	rating FLOAT
+);
+
 CREATE TABLE IF NOT EXISTS song (
 	id SERIAL PRIMARY KEY,
 	name VARCHAR(100) NOT NULL,
 	duration INTERVAL NOT NULL,
 	explicit BOOL DEFAULT false NOT NULL,
 	artist_id INT REFERENCES artist(id)
+	album_id INT REFERENCES album(id)
 );
 
 CREATE TABLE IF NOT EXISTS song_lyrics (
@@ -50,13 +57,6 @@ CREATE TABLE IF NOT EXISTS songs_genres (
 	PRIMARY KEY (song_id, genre_id)
 );
 
-CREATE TABLE IF NOT EXISTS album (
-	id SERIAL PRIMARY KEY,
-	name VARCHAR(100) NOT NULL,
-	rating FLOAT,
-	artist_id INT REFERENCES artist(id)
-);
-
 -- SELECTING DATA
 
 SELECT * FROM album;
@@ -77,9 +77,12 @@ INSERT INTO artist_details (date_of_birth, full_name, country, city, is_married,
 ('1972-10-17', 'Marshall Mathers', 'USA', 'Detroid', false, NULL, 2),
 ('1970-01-01', 'Curstis Jacson', 'USA', 'New York', true, 'Jacksona', 1)
 
+-- Inserting will fail because we can place rating from 0 - 5
+INSERT INTO album (id, name, rating) VALUES (101, 'ne e bitno', 16)
+
 INSERT INTO song (name, duration, explicit, artist_id) VALUES
-('Id The Club', '3 minutes 20 seconds', true, 1),
-('Mockingbird', '4 minutes 21 seconds', false, 2)
+('Id The Club', '3 minutes 20 seconds', true, 1, 1),
+('Mockingbird', '4 minutes 21 seconds', false, 2, 1)
 
 INSERT INTO song_lyrics (lyrics, song_id) VALUES
 ('It is your birthday..', 1)
@@ -194,9 +197,6 @@ INSERT INTO genre (id, name) VALUES (46, 'Soul')
 
 
 -- Check
-
--- Inserting will fail because we can place rating from 0 - 5
-INSERT INTO album (id, name, rating, artist_id) VALUES (101, 'ne e bitno', 16, 1)
 
 -- Adding song without artist
 INSERT INTO song (id, name, duration, explicit) VALUES
