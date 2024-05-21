@@ -162,7 +162,7 @@ INSERT INTO artist_details (date_of_birth, full_name, country, city, is_married,
 
 
 -- Removing artist_id references from album
-INSERT INTO album (id, name, rating) VALUES 
+INSERT INTO album (name, rating) VALUES 
 ('The Eminem Show', 4.5),
 ('Future Nostalgia', 4.7),
 ('The Hardest Way', 4.8),
@@ -682,7 +682,7 @@ INSERT INTO song_lyrics (lyrics, song_id) VALUES
 ('Why''d you only call me when you''re high...', 358),
 ('Snap out of it...', 360);
 
-INSERT INTO playlist (id, title) VALUES 
+INSERT INTO playlist (title) VALUES 
 ('Workout Hits'),
 ('Soft Pop Hits'),
 ('Balkan Ballads'),
@@ -728,7 +728,7 @@ INSERT INTO playlists_songs (playlist_id, song_id) VALUES
 (10, 35),
 (10, 38);
 
-INSERT INTO genre (id, name) VALUES 
+INSERT INTO genre (name) VALUES 
 ('Hip Hop'),
 ('Pop'),
 ('Rock'),
