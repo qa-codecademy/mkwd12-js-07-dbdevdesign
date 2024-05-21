@@ -161,7 +161,6 @@ INSERT INTO artist_details (date_of_birth, full_name, country, city, is_married,
 ('1990-02-01', 'Peter Fox', 'Germany', 'Berlin', false, NULL, null);
 
 
--- Removing artist_id references from album
 INSERT INTO album (name, rating) VALUES 
 ('The Eminem Show', 4.5),
 ('Future Nostalgia', 4.7),
