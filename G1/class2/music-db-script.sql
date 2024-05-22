@@ -804,3 +804,11 @@ INSERT INTO songs_genres (song_id, genre_id) VALUES
 (22, 2),
 (37, 4),
 (39, 2);
+
+SELECT setval(pg_get_serial_sequence('playlist', 'id'), (SELECT MAX(id) FROM playlist));
+SELECT setval(pg_get_serial_sequence('song', 'id'), (SELECT MAX(id) FROM song));
+SELECT setval(pg_get_serial_sequence('album', 'id'), (SELECT MAX(id) FROM album));
+SELECT setval(pg_get_serial_sequence('artist', 'id'), (SELECT MAX(id) FROM artist));
+SELECT setval(pg_get_serial_sequence('song_lyrics', 'id'), (SELECT MAX(id) FROM song_lyrics));
+SELECT setval(pg_get_serial_sequence('genre', 'id'), (SELECT MAX(id) FROM genre));
+SELECT setval(pg_get_serial_sequence('artist_details', 'id'), (SELECT MAX(id) FROM artist_details));
