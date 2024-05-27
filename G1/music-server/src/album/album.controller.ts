@@ -9,12 +9,10 @@ import { AlbumsQueryDto } from './dto/album-query.dto';
 export class AlbumController {
   constructor(private readonly albumService: AlbumService) {}
 
-  // @Get()
-  // @ApiOperation({ summary: 'Get a list of albums' })
-  // @ApiOkResponse({ description: 'List of albums', type: [Album] })
-  // async getAlbums(
-  //   @Query(ValidationPipe) getAlbumsDto: AlbumsQueryDto,
-  // ): Promise<Album[]> {
-  //   return this.albumService.findAll(getAlbumsDto);
-  // }
+  @Get()
+  @ApiOperation({ summary: 'Get a list of albums' })
+  @ApiOkResponse({ description: 'List of albums', type: [Album] })
+  async getAlbums(@Query(ValidationPipe) getAlbumsDto: AlbumsQueryDto) {
+    return this.albumService.findAll(getAlbumsDto);
+  }
 }
