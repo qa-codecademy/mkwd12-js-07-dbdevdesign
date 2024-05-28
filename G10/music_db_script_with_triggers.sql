@@ -805,6 +805,38 @@ INSERT INTO songs_genres (song_id, genre_id) VALUES
 (37, 4),
 (39, 2);
 
+ALTER TABLE song
+ADD COLUMN rating DECIMAL(2, 1) CHECK (rating >= 1 AND rating <= 5);
+
+CREATE OR REPLACE FUNCTION add_random_rating_to_songs()
+RETURNS VOID
+LANGUAGE plpgsql
+AS $$
+BEGIN
+    UPDATE song
+    SET rating = FLOOR(RANDOM() * 5 + 1);
+END;
+$$;
+
+CREATE OR REPLACE FUNCTION update_album_rating()
+RETURNS TRIGGER AS $$
+BEGIN
+    UPDATE album
+    SET rating = (
+        SELECT AVG(s.rating)
+        FROM song s
+        WHERE s.album_id = NEW.id
+    )
+    WHERE id = NEW.id;
+    RETURN NEW;
+END;
+$$ LANGUAGE plpgsql;
+
+CREATE TRIGGER album_rating_update
+AFTER INSERT OR UPDATE ON song
+FOR EACH ROW
+EXECUTE FUNCTION update_album_rating();
+
 SELECT setval(pg_get_serial_sequence('playlist', 'id'), (SELECT MAX(id) FROM playlist));
 SELECT setval(pg_get_serial_sequence('song', 'id'), (SELECT MAX(id) FROM song));
 SELECT setval(pg_get_serial_sequence('album', 'id'), (SELECT MAX(id) FROM album));
