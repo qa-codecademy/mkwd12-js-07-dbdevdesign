@@ -9,12 +9,10 @@ import { ArtistsQueryDto } from './dto/artist-query.dto';
 export class ArtistController {
   constructor(private readonly artistService: ArtistService) {}
 
-  // @Get()
-  // @ApiOperation({ summary: 'Get a list of artists' })
-  // @ApiOkResponse({ description: 'List of artists', type: [Artist] })
-  // async getArtists(
-  //   @Query(ValidationPipe) getArtistsDto: ArtistsQueryDto,
-  // ): Promise<Artist[]> {
-  //   return this.artistService.findAll(getArtistsDto);
-  // }
+  @Get()
+  @ApiOperation({ summary: 'Get a list of artists' })
+  @ApiOkResponse({ description: 'List of artists', type: [Artist] })
+  async getArtists(@Query(ValidationPipe) getArtistsDto: ArtistsQueryDto) {
+    return this.artistService.findAll(getArtistsDto);
+  }
 }
