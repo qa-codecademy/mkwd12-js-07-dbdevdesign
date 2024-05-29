@@ -11,4 +11,31 @@ export class ArtistDetailsService {
     private artistDetailsRepository: Repository<ArtistDetails>,
   ) {}
 
+  async findAll(
+    getArtistDetailsDto: ArtistDetailsQueryDto,
+  ): Promise<ArtistDetails[]> {
+    const { search, skip, take, country, is_married } = getArtistDetailsDto;
+    const query =
+      this.artistDetailsRepository.createQueryBuilder('artistDetails');
+
+    if (search) {
+      query.andWhere('artistDetails.full_name ILIKE :search', {
+        search: `%${search}%`,
+      });
+    }
+
+    if (country) {
+      query.andWhere('artistDetails.country = :country', { country });
+    }
+
+    if (is_married !== undefined) {
+      query.andWhere('artistDetails.is_married = :is_married', {
+        is_married: is_married === 'true',
+      });
+    }
+
+    query.skip(skip).take(take);
+
+    return await query.getMany();
+  }
 }

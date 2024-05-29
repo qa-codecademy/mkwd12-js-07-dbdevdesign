@@ -9,12 +9,12 @@ import { SongLyricsQueryDto } from './dto/song-lyrics.query.dto';
 export class SongLyricsController {
   constructor(private readonly songLyricsService: SongLyricsService) {}
 
-  @Get()
-  @ApiOperation({ summary: 'Get a list of song lyrics' })
-  @ApiOkResponse({ description: 'List of song lyrics', type: [SongLyrics] })
-  async getSongLyrics(
-    @Query(ValidationPipe) getSongLyricsDto: SongLyricsQueryDto,
-  ): Promise<SongLyrics[]> {
-    return this.songLyricsService.findAll(getSongLyricsDto);
-  }
+  // @Get()
+  // @ApiOperation({ summary: 'Get a list of song lyrics' })
+  // @ApiOkResponse({ description: 'List of song lyrics', type: [SongLyrics] })
+  // async getSongLyrics(
+  //   @Query(ValidationPipe) getSongLyricsDto: SongLyricsQueryDto,
+  // ): Promise<SongLyrics[]> {
+  //   return this.songLyricsService.findAll(getSongLyricsDto);
+  // }
 }
