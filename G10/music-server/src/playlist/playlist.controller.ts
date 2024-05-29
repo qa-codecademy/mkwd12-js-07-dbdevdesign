@@ -1,34 +1,21 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
+import { Controller, Get, Query, ValidationPipe } from '@nestjs/common';
 import { PlaylistService } from './playlist.service';
-import { CreatePlaylistDto } from './dto/playlist-query.dto';
-import { UpdatePlaylistDto } from './dto/update-playlist.dto';
+import { Playlist } from './playlist.entity';
+import { ApiTags, ApiOkResponse, ApiOperation } from '@nestjs/swagger';
+import { PlaylistsQueryDto } from './dto/playlist-query.dto';
 
-@Controller('playlist')
+@ApiTags('playlists')
+@Controller('playlists')
 export class PlaylistController {
   constructor(private readonly playlistService: PlaylistService) {}
 
-  @Post()
-  create(@Body() createPlaylistDto: CreatePlaylistDto) {
-    return this.playlistService.create(createPlaylistDto);
-  }
-
   @Get()
-  findAll() {
-    return this.playlistService.findAll();
+  @ApiOperation({ summary: 'Get a list of playlists' })
+  @ApiOkResponse({ description: 'List of playlists', type: [Playlist] })
+  async getPlaylists(
+    @Query(ValidationPipe) getPlaylistsDto: PlaylistsQueryDto,
+  ): Promise<Playlist[]> {
+    return this.playlistService.findAll(getPlaylistsDto);
   }
 
-  @Get(':id')
-  findOne(@Param('id') id: string) {
-    return this.playlistService.findOne(+id);
-  }
-
-  @Patch(':id')
-  update(@Param('id') id: string, @Body() updatePlaylistDto: UpdatePlaylistDto) {
-    return this.playlistService.update(+id, updatePlaylistDto);
-  }
-
-  @Delete(':id')
-  remove(@Param('id') id: string) {
-    return this.playlistService.remove(+id);
-  }
 }

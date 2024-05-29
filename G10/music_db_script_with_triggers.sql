@@ -10,7 +10,7 @@ CREATE TABLE artist (
 -- Artist Details table (One-to-One relationship with artist)
 CREATE TABLE artist_details (
     id SERIAL PRIMARY KEY,
-    date_of_birth DATE NOT NULL,
+    date_of_birth DATE,
     full_name VARCHAR(100),
     country VARCHAR(100),
     city VARCHAR(100),

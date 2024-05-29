@@ -1,26 +1,14 @@
 import { Injectable } from '@nestjs/common';
-import { CreateGenreDto } from './dto/genre-query.dto';
-import { UpdateGenreDto } from './dto/update-genre.dto';
+import { InjectRepository } from '@nestjs/typeorm';
+import { Repository } from 'typeorm';
+import { Genre } from './genre.entity';
+import { GenresQueryDto } from './dto/genre-query.dto';
 
 @Injectable()
 export class GenreService {
-  create(createGenreDto: CreateGenreDto) {
-    return 'This action adds a new genre';
-  }
+  constructor(
+    @InjectRepository(Genre)
+    private genreRepository: Repository<Genre>,
+  ) {}
 
-  findAll() {
-    return `This action returns all genre`;
-  }
-
-  findOne(id: number) {
-    return `This action returns a #${id} genre`;
-  }
-
-  update(id: number, updateGenreDto: UpdateGenreDto) {
-    return `This action updates a #${id} genre`;
-  }
-
-  remove(id: number) {
-    return `This action removes a #${id} genre`;
-  }
 }

@@ -1,34 +1,20 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
+import { Controller, Get, Query, ValidationPipe } from '@nestjs/common';
 import { ArtistService } from './artist.service';
-import { CreateArtistDto } from './dto/artist-query.dto';
-import { UpdateArtistDto } from './dto/update-artist.dto';
+import { Artist } from './artist.entity';
+import { ApiTags, ApiOkResponse, ApiOperation } from '@nestjs/swagger';
+import { ArtistsQueryDto } from './dto/artist-query.dto';
 
-@Controller('artist')
+@ApiTags('artists')
+@Controller('artists')
 export class ArtistController {
   constructor(private readonly artistService: ArtistService) {}
 
-  @Post()
-  create(@Body() createArtistDto: CreateArtistDto) {
-    return this.artistService.create(createArtistDto);
-  }
-
   @Get()
-  findAll() {
-    return this.artistService.findAll();
-  }
-
-  @Get(':id')
-  findOne(@Param('id') id: string) {
-    return this.artistService.findOne(+id);
-  }
-
-  @Patch(':id')
-  update(@Param('id') id: string, @Body() updateArtistDto: UpdateArtistDto) {
-    return this.artistService.update(+id, updateArtistDto);
-  }
-
-  @Delete(':id')
-  remove(@Param('id') id: string) {
-    return this.artistService.remove(+id);
+  @ApiOperation({ summary: 'Get a list of artists' })
+  @ApiOkResponse({ description: 'List of artists', type: [Artist] })
+  async getArtists(
+    @Query(ValidationPipe) getArtistsDto: ArtistsQueryDto,
+  ): Promise<Artist[]> {
+    return this.artistService.findAll(getArtistsDto);
   }
 }

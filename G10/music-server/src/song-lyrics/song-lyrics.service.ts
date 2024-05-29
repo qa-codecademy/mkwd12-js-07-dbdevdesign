@@ -1,26 +1,14 @@
 import { Injectable } from '@nestjs/common';
-import { CreateSongLyricDto } from './dto/song-lyrics-query.dto';
-import { UpdateSongLyricDto } from './dto/update-song-lyric.dto';
+import { InjectRepository } from '@nestjs/typeorm';
+import { Repository } from 'typeorm';
+import { SongLyrics } from './song-lyrics.entity';
+import { SongLyricsQueryDto } from './dto/song-lyrics.query.dto';
 
 @Injectable()
 export class SongLyricsService {
-  create(createSongLyricDto: CreateSongLyricDto) {
-    return 'This action adds a new songLyric';
-  }
+  constructor(
+    @InjectRepository(SongLyrics)
+    private songLyricsRepository: Repository<SongLyrics>,
+  ) {}
 
-  findAll() {
-    return `This action returns all songLyrics`;
-  }
-
-  findOne(id: number) {
-    return `This action returns a #${id} songLyric`;
-  }
-
-  update(id: number, updateSongLyricDto: UpdateSongLyricDto) {
-    return `This action updates a #${id} songLyric`;
-  }
-
-  remove(id: number) {
-    return `This action removes a #${id} songLyric`;
-  }
 }

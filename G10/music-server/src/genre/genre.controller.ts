@@ -1,34 +1,21 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
+import { Controller, Get, Query, ValidationPipe } from '@nestjs/common';
 import { GenreService } from './genre.service';
-import { CreateGenreDto } from './dto/genre-query.dto';
-import { UpdateGenreDto } from './dto/update-genre.dto';
+import { Genre } from './genre.entity';
+import { ApiTags, ApiOkResponse, ApiOperation } from '@nestjs/swagger';
+import { GenresQueryDto } from './dto/genre-query.dto';
 
-@Controller('genre')
+@ApiTags('genres')
+@Controller('genres')
 export class GenreController {
   constructor(private readonly genreService: GenreService) {}
 
-  @Post()
-  create(@Body() createGenreDto: CreateGenreDto) {
-    return this.genreService.create(createGenreDto);
-  }
-
   @Get()
-  findAll() {
-    return this.genreService.findAll();
+  @ApiOperation({ summary: 'Get a list of genres' })
+  @ApiOkResponse({ description: 'List of genres', type: [Genre] })
+  async getGenres(
+    @Query(ValidationPipe) getGenresDto: GenresQueryDto,
+  ): Promise<Genre[]> {
+    return this.genreService.findAll(getGenresDto);
   }
 
-  @Get(':id')
-  findOne(@Param('id') id: string) {
-    return this.genreService.findOne(+id);
-  }
-
-  @Patch(':id')
-  update(@Param('id') id: string, @Body() updateGenreDto: UpdateGenreDto) {
-    return this.genreService.update(+id, updateGenreDto);
-  }
-
-  @Delete(':id')
-  remove(@Param('id') id: string) {
-    return this.genreService.remove(+id);
-  }
 }

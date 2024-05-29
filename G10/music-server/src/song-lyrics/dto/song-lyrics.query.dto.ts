@@ -2,12 +2,12 @@ import { IsOptional, IsString, IsInt, Min } from 'class-validator';
 import { ApiProperty } from '@nestjs/swagger';
 import { Type } from 'class-transformer';
 
-export class GenresQueryDto {
+export class SongLyricsQueryDto {
   @IsOptional()
   @IsString()
   @ApiProperty({
     required: false,
-    description: 'Search term to look for in genre names',
+    description: 'Search term to look for in lyrics',
   })
   search?: string;
 
@@ -32,25 +32,4 @@ export class GenresQueryDto {
     default: 10,
   })
   take?: number = 10;
-
-  @IsOptional()
-  @IsInt()
-  @Min(1)
-  @Type(() => Number)
-  @ApiProperty({
-    required: false,
-    description: 'Id of a song',
-    default: 10,
-  })
-  songId?: number;
-
-  @IsOptional()
-  @IsString()
-  @Type(() => String)
-  @ApiProperty({
-    required: false,
-    description: 'Specific string pattern',
-    default: 10,
-  })
-  pattern?: string;
 }

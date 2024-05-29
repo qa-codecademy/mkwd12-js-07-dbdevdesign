@@ -9,7 +9,7 @@ async function bootstrap() {
 
   const config = new DocumentBuilder()
     .setTitle('Music server')
-    .setDescription('Managing artists, albums, genres and playlists')
+    .setDescription('Managing artist, albums, songs and playlists')
     .setVersion('1.0')
     .build();
 

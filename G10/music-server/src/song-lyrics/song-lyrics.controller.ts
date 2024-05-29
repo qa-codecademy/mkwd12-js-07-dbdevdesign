@@ -1,34 +1,20 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
+import { Controller, Get, Query, ValidationPipe } from '@nestjs/common';
 import { SongLyricsService } from './song-lyrics.service';
-import { CreateSongLyricDto } from './dto/song-lyrics-query.dto';
-import { UpdateSongLyricDto } from './dto/update-song-lyric.dto';
+import { SongLyrics } from './song-lyrics.entity';
+import { ApiTags, ApiOkResponse, ApiOperation } from '@nestjs/swagger';
+import { SongLyricsQueryDto } from './dto/song-lyrics.query.dto';
 
+@ApiTags('song-lyrics')
 @Controller('song-lyrics')
 export class SongLyricsController {
   constructor(private readonly songLyricsService: SongLyricsService) {}
 
-  @Post()
-  create(@Body() createSongLyricDto: CreateSongLyricDto) {
-    return this.songLyricsService.create(createSongLyricDto);
-  }
-
   @Get()
-  findAll() {
-    return this.songLyricsService.findAll();
-  }
-
-  @Get(':id')
-  findOne(@Param('id') id: string) {
-    return this.songLyricsService.findOne(+id);
-  }
-
-  @Patch(':id')
-  update(@Param('id') id: string, @Body() updateSongLyricDto: UpdateSongLyricDto) {
-    return this.songLyricsService.update(+id, updateSongLyricDto);
-  }
-
-  @Delete(':id')
-  remove(@Param('id') id: string) {
-    return this.songLyricsService.remove(+id);
+  @ApiOperation({ summary: 'Get a list of song lyrics' })
+  @ApiOkResponse({ description: 'List of song lyrics', type: [SongLyrics] })
+  async getSongLyrics(
+    @Query(ValidationPipe) getSongLyricsDto: SongLyricsQueryDto,
+  ): Promise<SongLyrics[]> {
+    return this.songLyricsService.findAll(getSongLyricsDto);
   }
 }
