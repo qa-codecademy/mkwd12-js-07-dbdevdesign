@@ -1,6 +1,6 @@
 import { IsOptional, IsString, IsInt, Min, IsBoolean } from 'class-validator';
 import { ApiProperty } from '@nestjs/swagger';
-import { Type } from 'class-transformer';
+import { Transform, Type } from 'class-transformer';
 
 export class SongsQueryDto {
   @IsOptional()
@@ -35,7 +35,7 @@ export class SongsQueryDto {
 
   @IsOptional()
   @IsBoolean()
-  @Type(() => Boolean)
+  @Type(() => Boolean) // for some reason it doesn't work properly
   @ApiProperty({ required: false, description: 'Filter by explicit content' })
   explicit?: boolean;
 

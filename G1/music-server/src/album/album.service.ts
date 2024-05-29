@@ -100,18 +100,39 @@ export class AlbumService {
   //     .getMany();
   // }
 
-  findAll(_?: any) {
-    const query = `
-        SELECT 
-          a.name AS album_name,
-          ar.name AS artist_name,
-          s.name AS song_name
-        FROM album a
-        LEFT JOIN song s ON s.album_id = a.id
-        LEFT JOIN artist ar ON ar.id = s.artist_id
-        LEFT JOIN artist_details ad ON ad.artist_id = ar.id
-    `;
+  // findAll(_?: any) {
+  //   const query = `
+  //       SELECT
+  //         a.name AS album_name,
+  //         ar.name AS artist_name,
+  //         s.name AS song_name
+  //       FROM album a
+  //       LEFT JOIN song s ON s.album_id = a.id
+  //       LEFT JOIN artist ar ON ar.id = s.artist_id
+  //       LEFT JOIN artist_details ad ON ad.artist_id = ar.id
+  //   `;
 
-    return this.entityManager.query(query);
+  //   return this.entityManager.query(query);
+  // }
+
+  // Albums, filter by album name, group by album id, filter by 1 or more songs
+  findAll(_?: any) {
+    return this.albumRepository
+      .createQueryBuilder('album')
+      .leftJoinAndSelect('album.songs', 'song')
+      .select('album.id')
+      .addSelect('album.name')
+      .addSelect('COUNT(song.id)', 'songCount')
+      .where('album.name ILIKE :name', { name: `%${'g'}%` })
+      .groupBy('album.id')
+      .having('COUNT(song.id) >= 1')
+      .getRawMany();
+
+    // SELECT al.id, COUNT(song.id) as song_count
+    // FROM album al
+    // LEFT JOIN songs s ON s.album_id = al.id
+    // WHERE al.name ILIKE '%g%'
+    // GROUP BY al.id
+    // HAVING COUNT(song.id) >= 1
   }
 }

@@ -33,12 +33,11 @@ export class ArtistService {
     return this.artistRepository
       .createQueryBuilder('artist')
       .leftJoin('artist.songs', 'song')
+      .select('artist.id', 'id')
+      .addSelect('artist.name', 'name')
+      .addSelect('COUNT(song.id)', 'songCount')
       .groupBy('artist.id')
-      .addGroupBy('song.id')
-      .orderBy('COUNT(song.id)', 'DESC')
-      .select('artist.id')
-      .addSelect('artist.name')
-      .addSelect('COUNT(song.id) AS song_count')
-      .getMany();
+      .having('COUNT(song.id) > :minSongs', { minSongs: 4 })
+      .getRawMany<{ id: number; name: string; songCount: number }>();
   }
 }
