@@ -11,6 +11,7 @@ import { TripORMEntity } from './entity/trip/trip.entity';
 import { Repository } from 'typeorm';
 import { BudgetORMEntity } from 'src/budget/entity/budget.entity';
 import { UsersService } from 'src/users/users.service';
+import { tripQueries } from './queries';
 
 @Injectable()
 export class TripService {
@@ -25,49 +26,78 @@ export class TripService {
   ) {}
 
   async getTrips(userID: number) {
-    console.log('user id is:', userID); // userID of the loggedIN user
-    const trips = await this.tripRepository.find({
-      relations: ['budget'],
-      where: { user: { id: userID } },
-    });
+    // #EXAMPLE 1
+    // const queryBuilder = this.tripRepository.createQueryBuilder('trip');
+    // const trips = await queryBuilder
+    //   .innerJoinAndSelect('trip.budget', 'budget')
+    //   .where('trip.user_id = :id', { id: userID })
+    //   .getMany();
+    // console.log('Trips', trips);
+    // return trips;
+    // #EXAMPLE 2
 
-    console.log('TRIPS', trips);
-    return trips;
+    // userID = 'DROP TABLE trip';
+    /**
+     *  SELECT trip.*, budget.*
+      FROM trip
+      INNER JOIN budget ON trip.id = budget.trip_id
+      WHERE trip.user_id = 'DROP TABLE trip'
+     */
+    // NOT RECOMMENDED APPROACH
+    const queryOne = `
+      SELECT trip.*, budget.*
+      FROM trip
+      INNER JOIN budget ON trip.id = budget.trip_id
+      WHERE trip.user_id = ${userID}
+    `;
+
+    // BETTER WAY
+    const queryTwo = `
+      SELECT trip.*, budget.*
+      FROM trip
+      INNER JOIN budget ON trip.id = budget.trip_id
+      WHERE trip.user_id = $1
+    `;
+
+    const rawTrip = await this.tripRepository.query(queryTwo, [userID]);
+    // TODO: Create a mapper that will transform the RAW trip into our trip data structure
+    return rawTrip;
   }
 
   async createTrip(tripCreationProps: TripCreationProps, userID: number) {
-    // 1. Create the budget
-    const budgetProps: Budget = {
-      amount: tripCreationProps.budget.amount,
-      currency: tripCreationProps.budget.currency,
-    };
+    // const tripInsertionQuery = tripQueries.CREATE_TRIP;
+    const tripInsertionQuery = `
+    INSERT INTO trip (destination, notes, status, user_id, start_date, end_date, created_at, updated_at)
+    VALUES ($1, $2, $3, $4, $5, $6, $7, $8) RETURNING id`;
 
-    const budgetEntity = this.budgetRepository.create(budgetProps);
-    await this.budgetRepository.save(budgetEntity);
+    const response = await this.tripRepository.query(tripInsertionQuery, [
+      tripCreationProps.destination,
+      tripCreationProps.notes,
+      tripCreationProps.status,
+      userID,
+      tripCreationProps.startDate,
+      tripCreationProps.endDate,
+      Date.now(),
+      null,
+    ]);
 
-    // 2. Create the trip
-    const trip: Trip = {
-      destination: tripCreationProps.destination,
-      status: tripCreationProps.status,
-      notes: tripCreationProps.notes,
-      startDate: tripCreationProps.startDate,
-      endDate: tripCreationProps.endDate,
-      createdAt: new Date().getTime(),
-      updatedAt: null,
-    };
+    console.log('Response trip', response);
 
-    const user = await this.userService.findOneByID(userID);
+    const [tripResponse] = response;
+    const tripID = tripResponse.id;
 
-    console.log('user', user);
-    const tripEntity = this.tripRepository.create({
-      ...trip,
-      budget: budgetEntity,
-      user: user,
-    });
+    const budgetInsertionQuery = `
+    INSERT INTO budget (amount, currency, trip_id)
+    VALUES ($1, $2, $3)
+    `;
 
-    await this.tripRepository.save(tripEntity);
+    await this.budgetRepository.query(budgetInsertionQuery, [
+      tripCreationProps.budget.amount,
+      tripCreationProps.budget.currency,
+      tripID,
+    ]);
 
-    return tripEntity.id;
+    return tripID;
   }
 
   async getTrip(id: string) {
@@ -117,5 +147,30 @@ export class TripService {
     if (!response.affected) {
       throw new NotFoundException(`Trip with id: ${id} was not found.`);
     }
+  }
+
+  async getUserTripCount(userID: number) {
+    console.log('USER ID: ', userID);
+    // SAME GOES WITH VIEW, just write the name of the view itself.
+    const query = `
+      SELECT * FROM get_trip_count_per_user($1)
+    `;
+
+    const response = await this.tripRepository.query(query, [userID]);
+    console.log('RESPONSE FROM TRIP COUNT', response);
+
+    const [userCount] = response;
+
+    return userCount.get_trip_count_per_user;
+
+    // WITH QUERY BUILDER
+    // WIP: Improve it since it is not calling the function
+
+    // const response = await this.tripRepository
+    //   .createQueryBuilder('get_trip_count_per_user($1)')
+    //   .setParameter('p_user_id', userID)
+    //   .getMany();
+
+    // console.log(response);
   }
 }

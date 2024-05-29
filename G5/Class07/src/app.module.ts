@@ -25,6 +25,7 @@ import { GeneralMiddleware } from './middleware/general.middleware';
           database: configService.get('DB_NAME'),
           autoLoadEntities: true,
           synchronize: false,
+          logging: true,
         };
       },
     }),

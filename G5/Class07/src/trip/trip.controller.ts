@@ -9,6 +9,7 @@ import {
   HttpCode,
   UseGuards,
   Req,
+  Query,
 } from '@nestjs/common';
 import { TripService } from './trip.service';
 import { TripDTO, UpdateTripDTO } from './dto/trip.dto';
@@ -56,12 +57,13 @@ export class TripController {
     return { message: 'Success created', tripId: id };
   }
 
-  @Get(':id')
-  async getTrip(@Param('id') id: string) {
-    const trip = await this.tripService.getTrip(id);
+  // @Get(':id')
+  // async getTrip(@Param('id') id: string) {
+  //   console.log('BINGO I WAS HERE');
+  //   const trip = await this.tripService.getTrip(id);
 
-    return trip;
-  }
+  //   return trip;
+  // }
 
   @Delete(':id')
   async deleteTrip(@Param('id') id: string) {
@@ -78,5 +80,15 @@ export class TripController {
     await this.tripService.updateTrip(id, requestBody);
 
     return { message: 'Update trip success.' };
+  }
+
+  @Get('count')
+  async getUserTripCount(@Req() request: Request) {
+    console.log('I WAS HERE');
+    const userID = request['user'].sub;
+
+    const tripCount = await this.tripService.getUserTripCount(userID);
+
+    return { userTotalTrips: tripCount };
   }
 }
