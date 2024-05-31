@@ -1,0 +1,19 @@
+GET http://localhost:3000/artist
+
+###
+GET http://localhost:3000/artist/details
+
+###
+GET http://localhost:3000/artist/albums
+
+###
+
+GET http://localhost:3000/artist-details
+
+###
+
+GET http://localhost:3000/song/1
+
+###
+
+GET http://localhost:3000/playlist/agg-data/1
