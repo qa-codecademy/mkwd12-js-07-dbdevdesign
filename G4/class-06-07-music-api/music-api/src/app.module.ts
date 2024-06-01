@@ -10,6 +10,7 @@ import { GenreModule } from './genre/genre.module';
 import { ArtistDetailsModule } from './artist-details/artist-details.module';
 import { SongModule } from './song/song.module';
 import { SongLyricsModule } from './song-lyrics/song-lyrics.module';
+import { ViewsModule } from './views/views.module';
 
 @Module({
   imports: [
@@ -22,6 +23,7 @@ import { SongLyricsModule } from './song-lyrics/song-lyrics.module';
     ArtistDetailsModule,
     SongModule,
     SongLyricsModule,
+    ViewsModule,
   ],
   controllers: [AppController],
   providers: [AppService],

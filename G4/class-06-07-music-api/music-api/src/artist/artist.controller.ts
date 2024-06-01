@@ -1,5 +1,6 @@
-import { Controller, Get } from '@nestjs/common';
+import { Body, Controller, Get, Param, Post, Query } from '@nestjs/common';
 import { ArtistService } from './artist.service';
+import { CreateArtistWithDetailsDto } from './create-artist-with-details.dto.ts';
 
 @Controller('artist')
 export class ArtistController {
@@ -18,5 +19,15 @@ export class ArtistController {
   @Get('/albums')
   getAllArtistsAndAlbumNames() {
     return this.artistService.getAristAndAlbumNames();
+  }
+
+  @Get('/song-count')
+  getArtistSongCount(@Query('name') artistName: string) {
+    return this.artistService.getArtistSongCount(artistName);
+  }
+
+  @Post()
+  createArtistWithDetails(@Body() body: CreateArtistWithDetailsDto) {
+    return this.artistService.createArtistWithDetails(body);
   }
 }

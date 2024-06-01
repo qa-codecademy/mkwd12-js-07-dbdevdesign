@@ -1,12 +1,14 @@
 import { Injectable } from '@nestjs/common';
-import { InjectRepository } from '@nestjs/typeorm';
+import { InjectEntityManager, InjectRepository } from '@nestjs/typeorm';
 import { Artist } from './artist.entity';
-import { Repository } from 'typeorm';
+import { EntityManager, Repository } from 'typeorm';
+import { CreateArtistWithDetailsDto } from './create-artist-with-details.dto.ts';
 
 @Injectable()
 export class ArtistService {
   constructor(
     @InjectRepository(Artist) private artistRepo: Repository<Artist>,
+    @InjectEntityManager() private entityManager: EntityManager,
   ) {}
 
   getAllArtists() {
@@ -45,5 +47,31 @@ export class ArtistService {
       .select('artist.name', 'artistot')
       .addSelect('album.name', 'albumot')
       .getRawMany();
+  }
+
+  getArtistSongCount(artistName: string) {
+    console.log(artistName);
+
+    return this.entityManager.query(
+      `select get_artist_song_count($1) as song_count`,
+      [artistName],
+    );
+  }
+
+  createArtistWithDetails(body: CreateArtistWithDetailsDto) {
+    const {
+      name,
+      date_of_birth,
+      full_name,
+      country,
+      city,
+      is_married,
+      spouse_name,
+    } = body;
+
+    return this.entityManager.query(
+      `CALL add_artist_with_details($1,$2,$3,$4,$5,$6,$7)`,
+      [name, date_of_birth, full_name, country, city, is_married, spouse_name],
+    );
   }
 }

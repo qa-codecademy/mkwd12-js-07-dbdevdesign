@@ -8,7 +8,7 @@ import {
   PrimaryGeneratedColumn,
 } from 'typeorm';
 
-@Entity()
+@Entity({})
 export class Artist {
   @PrimaryGeneratedColumn()
   id: number;

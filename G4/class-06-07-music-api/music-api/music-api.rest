@@ -12,8 +12,41 @@ GET http://localhost:3000/artist-details
 
 ###
 
+GET http://localhost:3000/artist/song-count?name=Eminem
+
+###
+
 GET http://localhost:3000/song/1
 
 ###
 
 GET http://localhost:3000/playlist/agg-data/1
+
+###
+
+POST http://localhost:3000/artist
+Content-Type: application/json
+
+{
+      "name": "Nest Singer",
+      "date_of_birth": "2000-10-10",
+      "full_name": "From Nest",
+      "country": "Macedonia",
+      "city": "Skopje",
+      "is_married": true,
+      "spouse_name": "Jane"
+}
+
+###
+
+POST http://localhost:3000/playlist
+Content-Type: application/json
+
+{
+      "title": "From Nest One",
+      "song_ids": [1,2,3,4,5]
+}
+
+###
+
+GET http://localhost:3000/artist-agg-data
